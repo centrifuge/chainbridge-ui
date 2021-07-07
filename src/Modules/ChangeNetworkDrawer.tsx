@@ -14,6 +14,11 @@ const useStyles = makeStyles(({ constants }: ITheme) =>
       display: 'flex',
       flexDirection: 'row',
       flexWrap: 'wrap',
+      '& button': {
+        fontSize: '16px',
+        height: '40px',
+        borderRadius: '40px',
+      },
       '& > *': {
         marginTop: constants.generalUnit * 2,
         marginRight: constants.generalUnit,

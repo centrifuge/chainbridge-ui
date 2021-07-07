@@ -242,17 +242,6 @@ const TransferPage = (): JSX.Element => {
 
   const transferSchema = object().shape({
     tokenAmount: string()
-      .test('Token selected', 'Please select a token', value => {
-        if (
-          !!value &&
-          preflightDetails &&
-          tokens[preflightDetails.token] &&
-          nativeTokenBalance !== undefined
-        ) {
-          return true;
-        }
-        return false;
-      })
       .test('InputValid', 'Input invalid', value => {
         try {
           return REGEX.test(`${value}`);
@@ -294,11 +283,11 @@ const TransferPage = (): JSX.Element => {
 
   const placeholder = useMemo(() => {
     if (homeConfig?.chainId === 0) {
-      return 'Ethereum address';
+      return 'Polkadot address';
     }
 
     if (homeConfig?.chainId === 1) {
-      return 'Polkadot address';
+      return 'Ethereum address';
     }
 
     return 'Address';
@@ -321,7 +310,7 @@ const TransferPage = (): JSX.Element => {
               setWalletType('Ethereum');
             }}
           >
-            Bridge wCFG
+            Get wCFG
           </Button>
           <Button
             className={classes.connectButton}
@@ -330,7 +319,7 @@ const TransferPage = (): JSX.Element => {
               setWalletType('Substrate');
             }}
           >
-            Bridge CFG
+            Get CFG
           </Button>
         </div>
       );
@@ -430,7 +419,7 @@ const TransferPage = (): JSX.Element => {
               }}
               disabled={!destinationChainConfig}
               name="tokenAmount"
-              label="Amount"
+              label={`Amount (Your Balance: ${nativeTokenBalance})`}
             />
           </section>
           <section>

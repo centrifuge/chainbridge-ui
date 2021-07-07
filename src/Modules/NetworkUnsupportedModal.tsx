@@ -67,7 +67,7 @@ const NetworkUnsupportedModal = (): JSX.Element => {
   const [supportedNetworks, setSupportedNetworks] = useState<number[]>([]);
 
   useEffect(() => {
-    if (pathname === ROUTE_LINKS.Transfer) {
+    if (pathname === '/') {
       setOpen(!homeChainConfig && !!isReady);
       setSupportedNetworks(
         chainbridgeConfig.chains

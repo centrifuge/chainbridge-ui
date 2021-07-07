@@ -11,10 +11,12 @@ const useStyles = makeStyles(({ constants, palette }: ITheme) =>
       color: palette.common.white.main,
       border: 'none',
       padding: `${constants.generalUnit * 3}px ${constants.generalUnit * 4}px`,
+      zIndex: 2001,
     },
     backdrop: {
       backgroundColor: `${palette.additional.gray[9]} !important`,
       opacity: `0.6 !important`,
+      zIndex: 2000,
     },
   }),
 );
