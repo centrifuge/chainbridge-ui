@@ -419,7 +419,7 @@ const TransferPage = (): JSX.Element => {
               }}
               disabled={!destinationChainConfig}
               name="tokenAmount"
-              label={`Amount (Your Balance: ${nativeTokenBalance})`}
+              label="Amount"
             />
           </section>
           <section>
