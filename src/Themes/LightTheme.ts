@@ -25,7 +25,7 @@ export const lightTheme = createTheme({
         },
         preflight: {
           1: '#2762FF', // Button bg color
-          2: '#262626', // Button color
+          2: 'white', // Button color
         },
         transactionModal: {
           1: '#2762FF', // border //geekblue5
