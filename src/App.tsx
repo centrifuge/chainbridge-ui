@@ -1,12 +1,10 @@
 import React from 'react';
-import { init, ErrorBoundary, showReportDialog } from '@sentry/react';
 import { ThemeSwitcher } from '@chainsafe/common-theme';
 import {
   CssBaseline,
   Router,
   ToasterProvider,
 } from '@chainsafe/common-components';
-
 import { Web3Provider } from '@chainsafe/web3-context';
 import { utils } from 'ethers';
 import Routes from './Components/Routes';
@@ -18,17 +16,6 @@ import { chainbridgeConfig } from './chainbridgeConfig';
 import '@chainsafe/common-theme/dist/font-faces.css';
 
 const chains = process.env.REACT_APP_CHAINS as 'testnets' | 'mainnets';
-
-if (
-  process.env.NODE_ENV === 'production' &&
-  process.env.REACT_APP_SENTRY_DSN_URL &&
-  process.env.REACT_APP_SENTRY_RELEASE
-) {
-  init({
-    dsn: process.env.REACT_APP_SENTRY_DSN_URL,
-    release: process.env.REACT_APP_SENTRY_RELEASE,
-  });
-}
 
 const App = (): JSX.Element => {
   const tokens = chainbridgeConfig[chains]
@@ -44,65 +31,39 @@ const App = (): JSX.Element => {
     }, {});
 
   return (
-    <ErrorBoundary
-      fallback={({ error, componentStack, eventId, resetError }) => (
-        <div>
-          <p>
-            An error occurred and has been logged. If you would like to provide
-            additional info to help us debug and resolve the issue, click the
-            &quot;Provide Additional Details&quot; button
-          </p>
-          <p>{error?.message.toString()}</p>
-          <p>{componentStack}</p>
-          <p>{eventId}</p>
-          <button
-            type="button"
-            onClick={() => showReportDialog({ eventId: eventId || '' })}
-          >
-            Provide Additional Details
-          </button>
-          <button type="button" onClick={resetError}>
-            Reset error
-          </button>
-        </div>
-      )}
-      onReset={() => window.location.reload()}
-    >
-      <ThemeSwitcher themes={{ light: lightTheme }}>
-        <CssBaseline />
-        <ToasterProvider autoDismiss>
-          <Web3Provider
-            tokensToWatch={tokens}
-            networkIds={[5]}
-            onboardConfig={{
-              dappId: process.env.REACT_APP_BLOCKNATIVE_DAPP_ID,
-              walletSelect: {
-                wallets: [{ walletName: 'metamask', preferred: true }],
-              },
-              subscriptions: {
-                network: network =>
-                  network && console.log('chainId: ', network),
-                balance: amount =>
-                  amount && console.log('balance: ', utils.formatEther(amount)),
-              },
-            }}
-            checkNetwork={false}
-            gasPricePollingInterval={120}
-            gasPriceSetting="fast"
-          >
-            <NetworkManagerProvider>
-              <ChainbridgeProvider>
-                <Router>
-                  <AppWrapper>
-                    <Routes />
-                  </AppWrapper>
-                </Router>
-              </ChainbridgeProvider>
-            </NetworkManagerProvider>
-          </Web3Provider>
-        </ToasterProvider>
-      </ThemeSwitcher>
-    </ErrorBoundary>
+    <ThemeSwitcher themes={{ light: lightTheme }}>
+      <CssBaseline />
+      <ToasterProvider autoDismiss>
+        <Web3Provider
+          tokensToWatch={tokens}
+          networkIds={[5]}
+          onboardConfig={{
+            dappId: process.env.REACT_APP_BLOCKNATIVE_DAPP_ID,
+            walletSelect: {
+              wallets: [{ walletName: 'metamask', preferred: true }],
+            },
+            subscriptions: {
+              network: network => network && console.log('chainId: ', network),
+              balance: amount =>
+                amount && console.log('balance: ', utils.formatEther(amount)),
+            },
+          }}
+          checkNetwork={false}
+          gasPricePollingInterval={120}
+          gasPriceSetting="fast"
+        >
+          <NetworkManagerProvider>
+            <ChainbridgeProvider>
+              <Router>
+                <AppWrapper>
+                  <Routes />
+                </AppWrapper>
+              </Router>
+            </ChainbridgeProvider>
+          </NetworkManagerProvider>
+        </Web3Provider>
+      </ToasterProvider>
+    </ThemeSwitcher>
   );
 };
 

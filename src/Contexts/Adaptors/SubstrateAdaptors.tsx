@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { ApiPromise } from '@polkadot/api';
+import * as Sentry from '@sentry/react';
 import {
   web3Accounts,
   web3Enable,
@@ -318,6 +319,7 @@ export const SubstrateHomeAdaptorProvider = ({
             )
             .catch((error: unknown) => {
               console.log(':( transaction failed', error);
+              Sentry.captureException(error);
               setTransactionStatus('Transfer Aborted');
             });
         }

@@ -9,7 +9,6 @@ import type { Weth } from './Weth';
 
 export class WethFactory {
   static connect(address: string, signerOrProvider: Signer | Provider): Weth {
-    // @ts-expect-error
     return new Contract(address, _abi, signerOrProvider) as Weth;
   }
 }

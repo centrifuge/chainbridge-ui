@@ -248,8 +248,6 @@ export class Erc20DetailedFactory {
     address: string,
     signerOrProvider: Signer | Provider,
   ): Erc20Detailed {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
     return new Contract(address, _abi, signerOrProvider) as Erc20Detailed;
   }
 }

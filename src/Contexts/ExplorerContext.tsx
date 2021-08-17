@@ -79,7 +79,6 @@ const ExplorerProvider = ({ children }: IExplorerContextProps): JSX.Element => {
                     )?.name || '',
                   toAddress: depositRecord._destinationRecipientAddress,
                   tokenAddress: depositRecord._tokenAddress,
-                  // @ts-expect-error
                   amount: depositRecord._amount,
                   resourceId: parsedLog.args.resourceID,
                 },
@@ -119,7 +118,6 @@ const ExplorerProvider = ({ children }: IExplorerContextProps): JSX.Element => {
                       )?.name || '',
                     toAddress: depositRecord._destinationRecipientAddress,
                     tokenAddress: depositRecord._tokenAddress,
-                    // @ts-expect-error
                     amount: depositRecord._amount,
                     resourceId,
                   },
