@@ -280,11 +280,13 @@ export const SubstrateHomeAdaptorProvider = ({
           const injector = await web3FromSource(targetAccount.meta.source);
           setTransactionStatus('Initializing Transfer');
           setDepositAmount(amount);
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-expect-error
           transferExtrinsic
             .signAndSend(
               address,
               { signer: injector.signer },
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
               // @ts-expect-error
               ({ status, events }) => {
                 status.isInBlock &&
@@ -293,6 +295,7 @@ export const SubstrateHomeAdaptorProvider = ({
                   );
 
                 if (status.isFinalized) {
+                  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                   // @ts-expect-error
                   events.filter(({ event }) =>
                     api.events[

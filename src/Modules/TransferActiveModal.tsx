@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import React from 'react';
 
 import { makeStyles, createStyles, ITheme } from '@chainsafe/common-theme';
@@ -220,12 +221,14 @@ const TransferActiveModal: React.FC<ITransferActiveModalProps> = ({
             {inTransitMessages.map((m, i) => {
               if (typeof m === 'string') {
                 return (
+                  // eslint-disable-next-line react/no-array-index-key
                   <Typography className={classes.vote} component="p" key={i}>
                     {m}
                   </Typography>
                 );
               }
               return (
+                // eslint-disable-next-line react/no-array-index-key
                 <Typography className={classes.vote} component="p" key={i}>
                   <span>Vote cast by {m.address}</span>
                   <span>{m.signed}</span>

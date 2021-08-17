@@ -6,6 +6,7 @@ import { BigNumber, ethers, utils } from 'ethers';
 
 import { parseUnits } from 'ethers/lib/utils';
 import { decodeAddress } from '@polkadot/util-crypto';
+import { Web3Provider } from '@ethersproject/providers';
 import {
   chainbridgeConfig,
   EvmBridgeConfig,
@@ -28,6 +29,19 @@ const resetAllowanceLogicFor = [
 ];
 
 const chains = process.env.REACT_APP_CHAINS as 'testnets' | 'mainnets';
+
+const getBaseFeeWithGasPrice = async (
+  provider: Web3Provider | undefined,
+  gasPrice: number,
+): Promise<string> => {
+  const lastBlock = await provider?.getBlock(-1);
+
+  const baseFee = lastBlock?.baseFeePerGas?.mul(125).div(100);
+
+  return BigNumber.from(utils.parseUnits(gasPrice.toString(), 9))
+    .add(BigNumber.from(baseFee))
+    .toString();
+};
 
 export const EVMHomeAdaptorProvider = ({
   children,
@@ -300,20 +314,10 @@ export const EVMHomeAdaptorProvider = ({
       }${decodedRecipient.substr(2)}`; // recipientAddress (?? bytes)
 
       try {
-        const lastBlock = await provider?.getBlock(-1);
-
-        const baseFee = lastBlock?.baseFeePerGas?.mul(125).div(100);
-
-        const baseFeeWithGasPrice = BigNumber.from(
-          utils.parseUnits(
-            (
-              (homeChainConfig as EvmBridgeConfig).defaultGasPrice || gasPrice
-            ).toString(),
-            9,
-          ),
-        )
-          .add(BigNumber.from(baseFee))
-          .toString();
+        let baseFeeWithGasPrice = await getBaseFeeWithGasPrice(
+          provider,
+          gasPrice,
+        );
 
         const currentAllowance = await erc20.allowance(
           address,
@@ -339,6 +343,11 @@ export const EVMHomeAdaptorProvider = ({
               )
             ).wait(1);
           }
+
+          baseFeeWithGasPrice = await getBaseFeeWithGasPrice(
+            provider,
+            gasPrice,
+          );
 
           await (
             await erc20.approve(
@@ -396,20 +405,10 @@ export const EVMHomeAdaptorProvider = ({
       return 'not ready';
 
     try {
-      const lastBlock = await provider?.getBlock(-1);
-
-      const baseFee = lastBlock?.baseFeePerGas?.mul(125).div(100);
-
-      const baseFeeWithGasPrice = BigNumber.from(
-        utils.parseUnits(
-          (
-            (homeChainConfig as EvmBridgeConfig).defaultGasPrice || gasPrice
-          ).toString(),
-          9,
-        ),
-      )
-        .add(BigNumber.from(baseFee))
-        .toString();
+      const baseFeeWithGasPrice = await getBaseFeeWithGasPrice(
+        provider,
+        gasPrice,
+      );
 
       const tx = await wrapper.deposit({
         value: parseUnits(`${value}`, homeChainConfig.decimals),
@@ -432,20 +431,10 @@ export const EVMHomeAdaptorProvider = ({
       return 'not ready';
 
     try {
-      const lastBlock = await provider?.getBlock(-1);
-
-      const baseFee = lastBlock?.baseFeePerGas?.mul(125).div(100);
-
-      const baseFeeWithGasPrice = BigNumber.from(
-        utils.parseUnits(
-          (
-            (homeChainConfig as EvmBridgeConfig).defaultGasPrice || gasPrice
-          ).toString(),
-          9,
-        ),
-      )
-        .add(BigNumber.from(baseFee))
-        .toString();
+      const baseFeeWithGasPrice = await getBaseFeeWithGasPrice(
+        provider,
+        gasPrice,
+      );
 
       const tx = await wrapper.deposit({
         value: parseUnits(`${value}`, homeChainConfig.decimals),

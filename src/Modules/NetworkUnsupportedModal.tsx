@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 
 import { makeStyles, createStyles, ITheme } from '@chainsafe/common-theme';
 import {
-  Button,
   ExclamationCircleInverseSvg,
   Typography,
   useLocation,

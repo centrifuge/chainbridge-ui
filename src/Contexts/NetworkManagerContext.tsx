@@ -231,6 +231,7 @@ const NetworkManagerProvider = ({
         transferTxHash,
       }}
     >
+      {/* eslint-disable-next-line no-nested-ternary */}
       {walletType === 'Ethereum' ? (
         <EVMHomeAdaptorProvider>
           <DestinationProvider>{children}</DestinationProvider>
