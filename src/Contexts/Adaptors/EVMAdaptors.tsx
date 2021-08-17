@@ -36,7 +36,7 @@ const getBaseFeeWithGasPrice = async (
 ): Promise<string> => {
   const lastBlock = await provider?.getBlock(-1);
 
-  const baseFee = lastBlock?.baseFeePerGas?.mul(125).div(100);
+  const baseFee = lastBlock?.baseFeePerGas?.mul(1125).div(1000);
 
   return BigNumber.from(utils.parseUnits(gasPrice.toString(), 9))
     .add(BigNumber.from(baseFee))
