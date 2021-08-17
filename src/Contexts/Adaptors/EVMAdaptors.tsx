@@ -373,6 +373,8 @@ export const EVMHomeAdaptorProvider = ({
           },
         );
 
+        baseFeeWithGasPrice = await getBaseFeeWithGasPrice(provider, gasPrice);
+
         await (
           await homeBridge.deposit(destinationChainId, token.resourceId, data, {
             gasPrice: baseFeeWithGasPrice,
