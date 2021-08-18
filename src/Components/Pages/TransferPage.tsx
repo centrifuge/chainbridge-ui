@@ -204,7 +204,7 @@ const useStyles = makeStyles(({ constants, palette }: ITheme) =>
 );
 
 type PreflightDetails = {
-  tokenAmount: number;
+  tokenAmount: string;
   token: string;
   tokenSymbol: string;
   receiver: string;
@@ -239,7 +239,7 @@ const TransferPage = (): JSX.Element => {
     token:
       homeConfig?.type === 'Ethereum' ? homeConfig.tokens[0].address : 'CFG',
     tokenSymbol: homeConfig?.nativeTokenSymbol || '',
-    tokenAmount: 0,
+    tokenAmount: '0',
   });
 
   useEffect(() => {
@@ -422,7 +422,7 @@ const TransferPage = (): JSX.Element => {
         )}
       <Formik
         initialValues={{
-          tokenAmount: 0,
+          tokenAmount: '0',
           token:
             homeConfig?.type === 'Ethereum'
               ? homeConfig.tokens[0].address
@@ -520,7 +520,7 @@ const TransferPage = (): JSX.Element => {
           setPreflightModalOpen(false);
           preflightDetails &&
             deposit(
-              preflightDetails.tokenAmount,
+              parseFloat(preflightDetails.tokenAmount.replaceAll(',', '')),
               preflightDetails.receiver,
               preflightDetails.token,
             );
@@ -528,7 +528,9 @@ const TransferPage = (): JSX.Element => {
         sourceNetwork={homeConfig?.name || ''}
         targetNetwork={destinationChainConfig?.name || ''}
         tokenSymbol={preflightDetails?.tokenSymbol || ''}
-        value={preflightDetails?.tokenAmount || 0}
+        value={
+          parseFloat(preflightDetails?.tokenAmount.replaceAll(',', '')) || 0
+        }
       />
       <TransferActiveModal open={!!transactionStatus} close={resetDeposit} />
       {/* This is here due to requiring router */}
