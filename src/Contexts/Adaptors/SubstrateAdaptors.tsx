@@ -54,7 +54,7 @@ export const SubstrateHomeAdaptorProvider = ({
 
   const [tokens, setTokens] = useState<Tokens>({});
 
-  const chains = process.env.REACT_APP_CHAINS as 'testnets' | 'mainnets';
+  const chains = import.meta.env.VITE_CHAINS as 'testnets' | 'mainnets';
 
   const ss58Format = chains === 'mainnets' ? 36 : undefined;
 
@@ -234,6 +234,7 @@ export const SubstrateHomeAdaptorProvider = ({
           });
         })
         .then(unsub => {
+          // @ts-expect-error
           unsubscribe = unsub;
         })
         .catch(console.error);
@@ -414,9 +415,11 @@ export const SubstrateDestinationAdaptorProvider = ({
     if (api && !listenerActive && depositNonce) {
       // Wire up event listeners
       // Subscribe to system events via storage
+      // @ts-expect-error
       const unsubscribe = api.query.system.events(events => {
         console.log(`----- Received ${events.length} event(s): -----`);
         // loop through the Vec<EventRecord>
+        // @ts-expect-error
         events.forEach(record => {
           // extract the phase, event and the event types
           const { event, phase } = record;
@@ -425,8 +428,8 @@ export const SubstrateDestinationAdaptorProvider = ({
           console.log(
             `${event.section}:${event.method}::phase=${phase.toString()}`,
           );
-          console.log(event.meta.documentation.toString());
           // loop through each of the parameters, displaying the type and data
+          // @ts-expect-error
           event.data.forEach((data, index) => {
             console.log(`${types[index].type};${data.toString()}`);
           });
@@ -459,6 +462,7 @@ export const SubstrateDestinationAdaptorProvider = ({
           }
         });
       });
+      // @ts-expect-error
       setListenerActive(unsubscribe);
     } else if (listenerActive && !depositNonce) {
       const unsubscribeCall = async () => {

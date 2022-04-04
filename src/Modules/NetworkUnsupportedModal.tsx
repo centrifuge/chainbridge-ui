@@ -11,7 +11,7 @@ import { useNetworkManager } from '../Contexts/NetworkManagerContext';
 import { useHomeBridge } from '../Contexts/HomeBridgeContext';
 import { chainbridgeConfig } from '../chainbridgeConfig';
 
-const chains = process.env.REACT_APP_CHAINS as 'testnets' | 'mainnets';
+const chains = import.meta.env.VITE_CHAINS as 'testnets' | 'mainnets';
 
 const useStyles = makeStyles(({ constants, palette }: ITheme) =>
   createStyles({

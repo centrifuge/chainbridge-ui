@@ -3,7 +3,7 @@ import * as Sentry from '@sentry/react';
 import { Bridge, BridgeFactory } from '@chainsafe/chainbridge-contracts';
 import { useWeb3 } from '@chainsafe/web3-context';
 import { BigNumber, ethers, utils } from 'ethers';
-
+import { Buffer } from 'buffer';
 import { parseUnits } from 'ethers/lib/utils';
 import { decodeAddress } from '@polkadot/util-crypto';
 import { Web3Provider } from '@ethersproject/providers';
@@ -28,7 +28,7 @@ const resetAllowanceLogicFor = [
   // Add other offending tokens here
 ];
 
-const chains = process.env.REACT_APP_CHAINS as 'testnets' | 'mainnets';
+const chains = import.meta.env.VITE_CHAINS as 'testnets' | 'mainnets';
 
 const getBaseFeeWithGasPrice = async (
   provider: Web3Provider | undefined,
@@ -315,6 +315,7 @@ export const EVMHomeAdaptorProvider = ({
 
       try {
         let baseFeeWithGasPrice = await getBaseFeeWithGasPrice(
+          // @ts-expect-error
           provider,
           gasPrice,
         );
@@ -345,6 +346,7 @@ export const EVMHomeAdaptorProvider = ({
           }
 
           baseFeeWithGasPrice = await getBaseFeeWithGasPrice(
+            // @ts-expect-error
             provider,
             gasPrice,
           );
@@ -373,6 +375,7 @@ export const EVMHomeAdaptorProvider = ({
           },
         );
 
+        // @ts-expect-error
         baseFeeWithGasPrice = await getBaseFeeWithGasPrice(provider, gasPrice);
 
         await (
@@ -408,6 +411,7 @@ export const EVMHomeAdaptorProvider = ({
 
     try {
       const baseFeeWithGasPrice = await getBaseFeeWithGasPrice(
+        // @ts-expect-error
         provider,
         gasPrice,
       );
@@ -434,6 +438,7 @@ export const EVMHomeAdaptorProvider = ({
 
     try {
       const baseFeeWithGasPrice = await getBaseFeeWithGasPrice(
+        // @ts-expect-error
         provider,
         gasPrice,
       );

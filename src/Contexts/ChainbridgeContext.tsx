@@ -53,7 +53,7 @@ const ChainbridgeContext = React.createContext<ChainbridgeContext | undefined>(
   undefined,
 );
 
-const chains = process.env.REACT_APP_CHAINS as 'testnets' | 'mainnets';
+const chains = import.meta.env.VITE_CHAINS as 'testnets' | 'mainnets';
 
 const ChainbridgeProvider = ({
   children,

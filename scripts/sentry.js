@@ -3,11 +3,11 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 async function createReleaseAndUpload() {
-  const release = process.env.REACT_APP_SENTRY_RELEASE;
-  const environment = process.env.REACT_APP_SENTRY_ENV;
+  const release = import.meta.env.VITE_SENTRY_RELEASE;
+  const environment = import.meta.env.VITE_SENTRY_ENV;
 
   if (!release || !environment) {
-    console.warn('REACT_APP_SENTRY_RELEASE or REACT_APP_SENTRY_ENV is not set');
+    console.warn('VITE_SENTRY_RELEASE or VITE_SENTRY_ENV is not set');
     return;
   }
 

@@ -5,14 +5,14 @@ import {
   SubstrateBridgeConfig,
 } from '../../../chainbridgeConfig';
 
-const chains = process.env.REACT_APP_CHAINS as 'testnets' | 'mainnets';
+const chains = import.meta.env.VITE_CHAINS as 'testnets' | 'mainnets';
 
 export const createApi = async (rpcUrl: string): Promise<ApiPromise> => {
   const provider = new WsProvider(rpcUrl);
   const subChainConfig = chainbridgeConfig[chains].find(
     c => c.rpcUrl === rpcUrl,
   ) as SubstrateBridgeConfig;
-  const types = (await import(`./${subChainConfig.typesFileName}`)) as any;
+  const types = (await import(`./bridgeTypes.json`)) as any;
   return ApiPromise.create({ provider, types });
 };
 

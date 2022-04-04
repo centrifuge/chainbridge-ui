@@ -20,7 +20,7 @@ const ExplorerContext = React.createContext<ExplorerContext | undefined>(
   undefined,
 );
 
-const chains = process.env.REACT_APP_CHAINS as 'testnets' | 'mainnets';
+const chains = import.meta.env.VITE_CHAINS as 'testnets' | 'mainnets';
 
 const ExplorerProvider = ({ children }: IExplorerContextProps): JSX.Element => {
   const [transfers, transfersDispatch] = useReducer(transfersReducer, {});

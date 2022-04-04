@@ -78,7 +78,7 @@ interface NetworkManagerContext {
   transferTxHash: string;
 }
 
-const chains = process.env.REACT_APP_CHAINS as 'testnets' | 'mainnets';
+const chains = import.meta.env.VITE_CHAINS as 'testnets' | 'mainnets';
 
 const NetworkManagerContext = React.createContext<
   NetworkManagerContext | undefined

@@ -17,14 +17,14 @@ import { NetworkManagerProvider } from './Contexts/NetworkManagerContext';
 import { chainbridgeConfig } from './chainbridgeConfig';
 import '@chainsafe/common-theme/dist/font-faces.css';
 
-const chains = process.env.REACT_APP_CHAINS as 'testnets' | 'mainnets';
+const chains = import.meta.env.VITE_CHAINS as 'testnets' | 'mainnets';
 
 if (
-  process.env.NODE_ENV === 'production' &&
-  process.env.REACT_APP_SENTRY_DSN_URL
+  import.meta.env.NODE_ENV === 'production' &&
+  import.meta.env.VITE_SENTRY_DSN_URL
 ) {
   init({
-    dsn: process.env.REACT_APP_SENTRY_DSN_URL,
+    dsn: import.meta.env.VITE_SENTRY_DSN_URL as string,
     integrations: [new Integrations.BrowserTracing()],
 
     // Set tracesSampleRate to 1.0 to capture 100%
@@ -79,7 +79,7 @@ const App = (): JSX.Element => {
             tokensToWatch={tokens}
             networkIds={[5]}
             onboardConfig={{
-              dappId: process.env.REACT_APP_BLOCKNATIVE_DAPP_ID,
+              dappId: import.meta.env.VITE_BLOCKNATIVE_DAPP_ID as string,
               walletSelect: {
                 wallets: [{ walletName: 'metamask', preferred: true }],
               },

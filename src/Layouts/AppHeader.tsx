@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import { Typography } from '@chainsafe/common-components';
 import { shortenAddress } from '../Utils/Helpers';
 import { useChainbridge } from '../Contexts/ChainbridgeContext';
-import { ReactComponent as CentrifugeLogo } from '../media/centrifuge_wordmark.svg';
+import CentrifugeLogo from '../media/centrifuge_wordmark.svg?component';
 
 const useStyles = makeStyles(({ constants, palette, zIndex }: ITheme) =>
   createStyles({
