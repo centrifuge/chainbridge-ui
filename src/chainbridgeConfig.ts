@@ -79,7 +79,7 @@ export const chainbridgeConfig: ChainbridgeConfig = {
       networkId: 1,
       name: 'Centrifuge',
       decimals: 18,
-      rpcUrl: 'wss://fullnode.centrifuge.io',
+      rpcUrl: 'wss://fullnode.parachain.centrifuge.io',
       type: 'Substrate',
       nativeTokenSymbol: 'CFG',
       chainbridgePalletName: 'chainBridge',
