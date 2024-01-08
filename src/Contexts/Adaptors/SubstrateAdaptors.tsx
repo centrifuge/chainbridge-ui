@@ -209,15 +209,15 @@ export const SubstrateHomeAdaptorProvider = ({
         .account(address, (result: any) => {
           const { data } = result.toJSON();
 
-          const miscFrozen = parseFloat(
-            utils.formatUnits(data.miscFrozen, homeChainConfig.decimals),
+          const frozen = parseFloat(
+            utils.formatUnits(data.frozen, homeChainConfig.decimals),
           );
 
           const balance = parseFloat(
             utils.formatUnits(data.free, homeChainConfig.decimals),
           );
 
-          const free = balance - miscFrozen;
+          const free = balance - frozen;
 
           const freeBalance = free > 0 ? free : 0;
 

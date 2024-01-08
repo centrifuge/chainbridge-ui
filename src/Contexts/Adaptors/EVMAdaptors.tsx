@@ -30,17 +30,23 @@ const resetAllowanceLogicFor = [
 
 const chains = import.meta.env.VITE_CHAINS as 'testnets' | 'mainnets';
 
-const getBaseFeeWithGasPrice = async (
+const getTrxFees = async (
   provider: Web3Provider | undefined,
-  gasPrice: number,
-): Promise<string> => {
+): Promise<{ baseFee: string; priorityFee: string }> => {
   const lastBlock = await provider?.getBlock(-1);
+  const priorityFees = await fetch(
+    `https://beaconcha.in/api/v1/execution/gasnow?apikey=${
+      import.meta.env.VITE_BEACONCHAIN_API_KEY
+    }`,
+  );
+  const { data } = await priorityFees.json();
 
-  const baseFee = lastBlock?.baseFeePerGas?.mul(1125).div(1000);
+  const baseFee = BigNumber.from(lastBlock?.baseFeePerGas?.mul(1125).div(1000));
 
-  return BigNumber.from(utils.parseUnits(gasPrice.toString(), 9))
-    .add(BigNumber.from(baseFee))
-    .toString();
+  return {
+    baseFee: baseFee.toString(),
+    priorityFee: data.standard.toString(),
+  };
 };
 
 export const EVMHomeAdaptorProvider = ({
@@ -50,7 +56,6 @@ export const EVMHomeAdaptorProvider = ({
     isReady,
     network,
     provider,
-    gasPrice,
     address,
     tokens,
     wallet,
@@ -314,10 +319,9 @@ export const EVMHomeAdaptorProvider = ({
       }${decodedRecipient.substr(2)}`; // recipientAddress (?? bytes)
 
       try {
-        let baseFeeWithGasPrice = await getBaseFeeWithGasPrice(
+        let trxFees = await getTrxFees(
           // @ts-expect-error
           provider,
-          gasPrice,
         );
 
         const currentAllowance = await erc20.allowance(
@@ -339,16 +343,16 @@ export const EVMHomeAdaptorProvider = ({
                 (homeChainConfig as EvmBridgeConfig).erc20HandlerAddress,
                 BigNumber.from(utils.parseUnits('0', erc20Decimals)),
                 {
-                  gasPrice: baseFeeWithGasPrice,
+                  maxFeePerGas: trxFees.baseFee,
+                  maxPriorityFeePerGas: trxFees.priorityFee,
                 },
               )
             ).wait(1);
           }
 
-          baseFeeWithGasPrice = await getBaseFeeWithGasPrice(
+          trxFees = await getTrxFees(
             // @ts-expect-error
             provider,
-            gasPrice,
           );
 
           await (
@@ -358,11 +362,13 @@ export const EVMHomeAdaptorProvider = ({
                 utils.parseUnits(amount.toString(), erc20Decimals),
               ),
               {
-                gasPrice: baseFeeWithGasPrice,
+                maxFeePerGas: trxFees.baseFee,
+                maxPriorityFeePerGas: trxFees.priorityFee,
               },
             )
           ).wait(1);
         }
+
         homeBridge.once(
           homeBridge.filters.Deposit(
             destinationChainId,
@@ -375,12 +381,13 @@ export const EVMHomeAdaptorProvider = ({
           },
         );
 
-        // @ts-expect-error
-        baseFeeWithGasPrice = await getBaseFeeWithGasPrice(provider, gasPrice);
+        trxFees = await getTrxFees(
+          // @ts-expect-error
+          provider,
+        );
 
         await (
           await homeBridge.deposit(destinationChainId, token.resourceId, data, {
-            gasPrice: baseFeeWithGasPrice,
             value: utils.parseUnits((bridgeFee || 0).toString(), 18),
           })
         ).wait();
@@ -397,7 +404,6 @@ export const EVMHomeAdaptorProvider = ({
       address,
       bridgeFee,
       homeChainConfig,
-      gasPrice,
       provider,
       setDepositNonce,
       setTransactionStatus,
@@ -410,15 +416,15 @@ export const EVMHomeAdaptorProvider = ({
       return 'not ready';
 
     try {
-      const baseFeeWithGasPrice = await getBaseFeeWithGasPrice(
+      const trxFees = await getTrxFees(
         // @ts-expect-error
         provider,
-        gasPrice,
       );
 
       const tx = await wrapper.deposit({
         value: parseUnits(`${value}`, homeChainConfig.decimals),
-        gasPrice: baseFeeWithGasPrice,
+        maxFeePerGas: trxFees.baseFee,
+        maxPriorityFeePerGas: trxFees.priorityFee,
       });
 
       await tx?.wait();
@@ -437,15 +443,15 @@ export const EVMHomeAdaptorProvider = ({
       return 'not ready';
 
     try {
-      const baseFeeWithGasPrice = await getBaseFeeWithGasPrice(
+      const trxFees = await getTrxFees(
         // @ts-expect-error
         provider,
-        gasPrice,
       );
 
       const tx = await wrapper.deposit({
         value: parseUnits(`${value}`, homeChainConfig.decimals),
-        gasPrice: baseFeeWithGasPrice,
+        maxFeePerGas: trxFees.baseFee,
+        maxPriorityFeePerGas: trxFees.priorityFee,
       });
 
       await tx?.wait();
