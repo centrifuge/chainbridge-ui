@@ -91,8 +91,6 @@ const App = (): JSX.Element => {
               },
             }}
             checkNetwork={false}
-            gasPricePollingInterval={120}
-            gasPriceSetting="fast"
           >
             <NetworkManagerProvider>
               <ChainbridgeProvider>
