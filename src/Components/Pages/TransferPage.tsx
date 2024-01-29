@@ -289,13 +289,30 @@ const TransferPage = (): JSX.Element => {
           tokens[preflightDetails.token] &&
           balance
         ) {
-          if (homeConfig?.type === 'Ethereum') {
-            return parseFloat(value) <= balance;
-          }
-          return parseFloat(value) + (bridgeFee || 0) <= balance;
+          return parseFloat(value) <= balance;
         }
         return false;
       })
+      .test(
+        'Max',
+        'Insufficient funds to pay for bridge fees. See bridge fee below.',
+        value => {
+          if (
+            value &&
+            preflightDetails &&
+            tokens[preflightDetails.token] &&
+            balance
+          ) {
+            if (homeConfig?.type === 'Substrate') {
+              return parseFloat(value) + (bridgeFee || 0) <= balance;
+            }
+
+            return true;
+          }
+
+          return false;
+        },
+      )
       .test('Min', 'Less than minimum', value => {
         if (value) {
           return parseFloat(value) > 0;
@@ -464,10 +481,6 @@ const TransferPage = (): JSX.Element => {
               classNames={{
                 input: classes.addressInput,
               }}
-              senderAddress={`${address}`}
-              sendToSameAccountHelper={
-                destinationChainConfig?.type === homeConfig?.type
-              }
             />
           </section>
           {homeConfig?.type === 'Substrate' && (
