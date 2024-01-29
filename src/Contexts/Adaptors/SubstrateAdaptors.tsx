@@ -149,21 +149,11 @@ export const SubstrateHomeAdaptorProvider = ({
     if (api) {
       const config = homeChainConfig as SubstrateBridgeConfig;
 
-      let fee;
-
-      if (config.bridgeFeeFunctionName) {
-        fee = new BN(
-          Number(
-            await api.query[config.transferPalletName][
-              config.bridgeFeeFunctionName
-            ](),
-          ),
-        )
-          .shiftedBy(-config.decimals)
-          .toNumber();
-      } else {
-        fee = config.bridgeFeeValue || 0;
-      }
+      const fee = new BN(
+        Number(await api.query.fees.feeBalances('BridgeNativeTransfer')),
+      )
+        .shiftedBy(-config.decimals)
+        .toNumber();
 
       setBridgeFee(fee);
     }
@@ -174,7 +164,7 @@ export const SubstrateHomeAdaptorProvider = ({
       const currentId = Number(
         api.consts[
           (homeChainConfig as SubstrateBridgeConfig).chainbridgePalletName
-        ].chainIdentity.toHuman(),
+        ].chainId.toHuman(),
       );
       if (homeChainConfig?.chainId !== currentId) {
         const correctConfig = homeChains.find(

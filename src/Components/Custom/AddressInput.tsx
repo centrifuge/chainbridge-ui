@@ -22,11 +22,9 @@ const useStyles = makeStyles(({ constants }: ITheme) =>
 );
 
 interface IAddressInput extends FormikTextInputProps {
-  senderAddress: string;
   classNames?: {
     input?: string;
   };
-  sendToSameAccountHelper?: boolean;
 }
 
 const AddressInput: React.FC<IAddressInput> = ({
