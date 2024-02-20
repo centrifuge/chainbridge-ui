@@ -33,7 +33,7 @@ const useStyles = makeStyles(({ animation, constants, palette }: ITheme) =>
       // left: "50%",
       margin: '0 auto',
       // transform: "translate(-50%, -50%)",
-      maxWidth: 460,
+      maxWidth: 540,
       display: 'flex',
       flexDirection: 'column',
       overflow: 'hidden',
