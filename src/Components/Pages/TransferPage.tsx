@@ -40,9 +40,7 @@ const useStyles = makeStyles(({ constants, palette }: ITheme) =>
       marginBottom: '28px',
     },
     connectButton: {
-      width: '160px',
       fontSize: '16px',
-      height: '40px',
     },
     connecting: {
       textAlign: 'center',
@@ -350,6 +348,7 @@ const TransferPage = (): JSX.Element => {
             width: '100%',
             display: 'flex',
             justifyContent: 'space-between',
+            gap: 16,
           }}
         >
           <Button
@@ -359,7 +358,7 @@ const TransferPage = (): JSX.Element => {
               setWalletType('Ethereum');
             }}
           >
-            Get CFG
+            Transfer CFG from Ethereum to Centrifuge
           </Button>
           <Button
             className={classes.connectButton}
@@ -368,7 +367,7 @@ const TransferPage = (): JSX.Element => {
               setWalletType('Substrate');
             }}
           >
-            Get wCFG
+            Transfer CFG from Centrifuge to Ethereum
           </Button>
         </div>
       );

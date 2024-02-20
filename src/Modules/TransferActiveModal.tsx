@@ -164,7 +164,6 @@ const TransferActiveModal: React.FC<ITransferActiveModalProps> = ({
     depositAmount,
     transferTxHash,
   } = useChainbridge();
-  const tokenSymbol = homeConfig?.type === 'Ethereum' ? 'wCFG' : 'CFG';
 
   return (
     <CustomModal
@@ -245,7 +244,7 @@ const TransferActiveModal: React.FC<ITransferActiveModalProps> = ({
             <Typography className={classes.receipt} component="p">
               Successfully transferred{' '}
               <strong>
-                {depositAmount} {tokenSymbol}
+                {depositAmount} CFG
                 <br /> from {homeConfig?.name} to {destinationChainConfig?.name}
                 .
               </strong>
