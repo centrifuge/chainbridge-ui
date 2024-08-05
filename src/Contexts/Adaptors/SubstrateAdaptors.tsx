@@ -276,7 +276,7 @@ export const SubstrateHomeAdaptorProvider = ({
           transferExtrinsic
             .signAndSend(
               address,
-              { signer: injector.signer },
+              { signer: injector.signer, withSignedTransaction: true },
               // eslint-disable-next-line @typescript-eslint/ban-ts-comment
               // @ts-expect-error
               ({ status, events }) => {
